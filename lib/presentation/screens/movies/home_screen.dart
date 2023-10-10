@@ -1,6 +1,4 @@
-import 'package:cinemapedia/config/constants/envinronment.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_providers.dart';
-import 'package:cinemapedia/presentation/providers/movies/movies_slideshow_provider.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,13 +31,19 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
     ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+    final upComingMovie = ref.watch(upcomingMoviesProvider);
     // final moviesSlideshow = ref.watch(moviesSlideshowProvider);
+
+    return FullScreenLoader();
 
     return CustomScrollView(slivers: [
       const SliverAppBar(
@@ -63,11 +67,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
               },
             ),
             MovieHorizontalListview(
-              movies: nowPlayingMovies,
+              movies: upComingMovie,
               title: 'Próximamente',
               subTitle: 'Lunes 20',
               loadNextPage: () {
-                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                ref.read(upcomingMoviesProvider.notifier).loadNextPage();
               },
             ),
             MovieHorizontalListview(
@@ -80,11 +84,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
             ),
 
             MovieHorizontalListview(
-              movies: nowPlayingMovies,
+              movies: topRatedMovies,
               title: 'Mejor Calificadas',
               subTitle: 'Siempre',
               loadNextPage: () {
-                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                ref.read(topRatedMoviesProvider.notifier).loadNextPage();
               },
             ),
             const SizedBox(
